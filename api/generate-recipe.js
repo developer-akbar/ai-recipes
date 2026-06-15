@@ -17,18 +17,30 @@ export default async function handler(req, res) {
       messages: [
         {
           role: "system",
-          content: "You are a helpful recipe assistant specializing in WK Kellogg products. Generate recipes in JSON format."
+          content: `You are a professional WK Kellogg Recipe Assistant. 
+          
+          CRITICAL VALIDATION RULE:
+          1. If the user's input is random text, gibberish, or completely unrelated to food, cooking, or recipes, you MUST return a JSON object with an error message.
+          2. Structure for ERROR: { "error": "I couldn't identify a recipe request in your message. Please ask for a recipe related to food or Kellogg products." }
+          3. Structure for SUCCESS: { "name": "...", "ingredients": ["...", "..."], "steps": ["...", "..."], "preparation_time": "...", "tips": "..." }
+          
+          Always try to incorporate a WK Kellogg cereal or snack if appropriate.`
         },
         {
           role: "user",
-          content: `${prompt}. Please provide the recipe in the following JSON structure: { "name": "...", "ingredients": ["...", "..."], "steps": ["...", "..."], "preparation_time": "...", "tips": "..." }. Ensure the recipe prominently features a WK Kellogg product if mentioned.`
+          content: prompt
         }
       ],
       response_format: { type: "json_object" }
     });
 
-    const recipe = JSON.parse(completion.choices[0].message.content);
-    res.status(200).json({ recipe });
+    const result = JSON.parse(completion.choices[0].message.content);
+
+    if (result.error) {
+      return res.status(400).json({ error: result.error });
+    }
+
+    res.status(200).json({ recipe: result });
   } catch (error) {
     console.error('OpenAI Error:', error);
     res.status(500).json({ error: 'Failed to generate recipe' });

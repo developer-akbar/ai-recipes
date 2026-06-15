@@ -13,6 +13,7 @@ const KELLOGG_PRODUCTS = [
 ];
 
 function App() {
+  const [inputMode, setInputMode] = useState('product'); // 'product' or 'custom'
   const [product, setProduct] = useState('');
   const [customInput, setCustomInput] = useState('');
   const [recipe, setRecipe] = useState(null);
@@ -21,24 +22,36 @@ function App() {
 
   const generateRecipe = async (e) => {
     e.preventDefault();
+    
+    // Validation
+    if (inputMode === 'product' && !product) {
+      setError('Please select a Kellogg product.');
+      return;
+    }
+    if (inputMode === 'custom' && customInput.trim().length < 5) {
+      setError('Please enter a valid recipe request (at least 5 characters).');
+      return;
+    }
+
     setLoading(true);
     setError('');
     setRecipe(null);
 
-    const prompt = customInput || `Create a breakfast recipe for ${product}`;
+    const prompt = inputMode === 'custom' ? customInput : `Create a breakfast recipe for ${product}`;
 
     try {
       const response = await fetch('/api/generate-recipe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, product }),
+        body: JSON.stringify({ prompt, mode: inputMode }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to generate recipe');
+        throw new Error(data.error || 'Failed to generate recipe');
       }
 
-      const data = await response.json();
       setRecipe(data.recipe);
     } catch (err) {
       setError(err.message);
@@ -56,39 +69,59 @@ function App() {
 
       <main>
         <form onSubmit={generateRecipe} className="recipe-form">
-          <div className="form-group">
-            <label htmlFor="product-select">Select a Product:</label>
-            <select 
-              id="product-select" 
-              value={product} 
-              onChange={(e) => {
-                setProduct(e.target.value);
-                setCustomInput(''); // Clear custom input when product changes
-              }}
-              required={!customInput}
-            >
-              <option value="">-- Choose a product --</option>
-              {KELLOGG_PRODUCTS.map(p => (
-                <option key={p} value={p}>{p}</option>
-              ))}
-            </select>
+          <div className="mode-selector">
+            <label className={`radio-label ${inputMode === 'product' ? 'active' : ''}`}>
+              <input 
+                type="radio" 
+                name="mode" 
+                value="product" 
+                checked={inputMode === 'product'} 
+                onChange={() => setInputMode('product')} 
+              />
+              Select Product
+            </label>
+            <label className={`radio-label ${inputMode === 'custom' ? 'active' : ''}`}>
+              <input 
+                type="radio" 
+                name="mode" 
+                value="custom" 
+                checked={inputMode === 'custom'} 
+                onChange={() => setInputMode('custom')} 
+              />
+              Custom Request
+            </label>
           </div>
 
-          <div className="divider">OR</div>
-
-          <div className="form-group">
-            <label htmlFor="custom-input">Custom Recipe Request:</label>
-            <input 
-              type="text" 
-              id="custom-input" 
-              placeholder='e.g., "Create breakfast recipe for Special K Cereals"' 
-              value={customInput}
-              onChange={(e) => setCustomInput(e.target.value)}
-            />
-          </div>
+          {inputMode === 'product' ? (
+            <div className="form-group fade-in">
+              <label htmlFor="product-select">Choose a Kellogg Product:</label>
+              <select 
+                id="product-select" 
+                value={product} 
+                onChange={(e) => setProduct(e.target.value)}
+              >
+                <option value="">-- Choose a product --</option>
+                {KELLOGG_PRODUCTS.map(p => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <div className="form-group fade-in">
+              <label htmlFor="custom-input">What would you like to make?</label>
+              <input 
+                type="text" 
+                id="custom-input" 
+                placeholder='e.g., "Breakfast muffins with Special K"' 
+                value={customInput}
+                onChange={(e) => setCustomInput(e.target.value)}
+              />
+              <small className="hint">Must be related to food or Kellogg products.</small>
+            </div>
+          )}
 
           <button type="submit" disabled={loading}>
-            {loading ? 'Generating...' : 'Generate Recipe'}
+            {loading ? 'Validating & Generating...' : 'Generate Recipe'}
           </button>
         </form>
 
