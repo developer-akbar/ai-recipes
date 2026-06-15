@@ -46,37 +46,46 @@ header p {
 
 .mode-selector {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
   background: #f1f5f9;
-  padding: 0.5rem;
-  border-radius: 16px;
+  padding: 0.4rem;
+  border-radius: 14px;
+  margin-bottom: 2.5rem;
+  position: relative;
+  border: 1px solid #e2e8f0;
 }
 
 .radio-label {
   flex: 1;
   text-align: center;
-  padding: 0.75rem;
-  border-radius: 12px;
+  padding: 0.8rem;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s;
+  font-weight: 700;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  color: var(--text-muted);
+  position: relative;
+  z-index: 1;
+  user-select: none;
 }
 
+/* Hide the actual radio input completely */
 .radio-label input {
-  width: auto;
-  margin: 0;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
 .radio-label.active {
   background: white;
   color: var(--primary);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.radio-label:hover:not(.active) {
+  color: var(--secondary);
 }
 
 .fade-in {
