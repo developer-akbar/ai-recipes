@@ -97,25 +97,27 @@ function App() {
         {recipe && (
           <article className="recipe-card">
             <h2>{recipe.name}</h2>
-            <p className="prep-time"><strong>Prep Time:</strong> {recipe.preparation_time}</p>
+            <div className="prep-time">
+              <span>⏱️ {recipe.preparation_time}</span>
+            </div>
             
             <section>
               <h3>Ingredients</h3>
-              <ul>
+              <ul className="ingredients-list">
                 {recipe.ingredients.map((ing, i) => <li key={i}>{ing}</li>)}
               </ul>
             </section>
 
             <section>
-              <h3>Steps</h3>
-              <ol>
+              <h3>Instructions</h3>
+              <ol className="steps-list">
                 {recipe.steps.map((step, i) => <li key={i}>{step}</li>)}
               </ol>
             </section>
 
             {recipe.tips && (
-              <section className="tips">
-                <h3>Tips</h3>
+              <section className="tips-box">
+                <h3>Pro Tips</h3>
                 <p>{recipe.tips}</p>
               </section>
             )}
