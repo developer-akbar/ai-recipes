@@ -1,0 +1,147 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+header h1 {
+  color: #d32f2f;
+  margin-bottom: 0.5rem;
+}
+
+header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.recipe-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+select, input {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.divider {
+  text-align: center;
+  margin: 1rem 0;
+  color: #999;
+  font-weight: bold;
+  position: relative;
+}
+
+.divider::before, .divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #eee;
+}
+
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+button {
+  width: 100%;
+  padding: 1rem;
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover:not(:disabled) {
+  background-color: #b71c1c;
+}
+
+button:disabled {
+  background-color: #ef9a9a;
+  cursor: not-allowed;
+}
+
+.error {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.recipe-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  line-height: 1.6;
+}
+
+.recipe-card h2 {
+  color: #d32f2f;
+  margin-top: 0;
+  border-bottom: 2px solid #f4f7f6;
+  padding-bottom: 1rem;
+}
+
+.prep-time {
+  background: #f4f7f6;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+
+.recipe-card h3 {
+  color: #333;
+  margin-top: 2rem;
+  border-left: 4px solid #d32f2f;
+  padding-left: 1rem;
+}
+
+ul, ol {
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+.tips {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #fff9c4;
+  border-radius: 4px;
+}
+
+.tips h3 {
+  margin-top: 0;
+  border-left-color: #fbc02d;
+}
