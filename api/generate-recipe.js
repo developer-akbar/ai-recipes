@@ -9,6 +9,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
+  // Check if OpenAI is enabled
+  if (process.env.OPENAI_ENABLE !== 'true') {
+    return res.status(503).json({ error: 'OpenAI API is down. Unable to generate recipes at this time.' });
+  }
+
   const { prompt, product } = req.body;
 
   try {
